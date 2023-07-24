@@ -1,0 +1,61 @@
+{% extends 'MyApp/baseBack.html' %}
+
+{% block content %}
+
+<div class="container p-5">
+    <h1 class='text-center mb-5'>Liste des blogs</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Auteur</th>
+                <th>Nom</th>
+                <th>Catégorie</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Boucle pour afficher chaque article -->
+            {% for article in articles %}
+                <tr>
+                    <td class="align-middle">{{ article.id }}</td>
+                    <td class="align-middle">{{ article.user.username }}</td>
+                    <td class="align-middle">{{ article.title }}</td>
+                    <td class="align-middle">{{ article.category.category }}</td>
+                    <td class="align-middle">
+                        {% if user.is_authenticated and user == article.user %}
+                            <a href="/article/edit/{{ article.id }}" class="btn btn-secondary px-3">Modifier</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.is_authenticated %}
+                            {% if user == article.user or user.role.id == 1 %}
+                                <form action="/article/destroy/{{ article.id }}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if article.validate == False %}
+                            {% if user.role.id == 1 or user.role.id == 3 %}
+                                <form action="{% url 'validate_article' article.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">Valider</button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'create_article' %}">
+        <button type="button" class="btn btn-primary">Créer un article</button>
+    </a>
+</div>
+
+{% endblock content %}

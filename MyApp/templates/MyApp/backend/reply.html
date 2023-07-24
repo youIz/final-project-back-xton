@@ -1,0 +1,22 @@
+{% extends 'MyApp/baseBack.html' %}
+
+{% block content %}
+    <form method='POST'>
+        {% csrf_token %}
+        {% if errors %}
+                <div class="error-message">
+                    <ul>
+                        {% for field_errors in errors %}
+                            {% for error in field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="form-floating">
+            {{form.content}}
+            </div>
+            <button type="submit" class='btn btn-outline-secondary'>Envoyer</button>
+    </form>
+{% endblock content %}

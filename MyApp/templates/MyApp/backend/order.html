@@ -1,0 +1,89 @@
+{% extends 'MyApp/baseBack.html' %}
+
+{% block content %}
+
+    <div class="container p-5">
+        <h1 class="text-center mb-5">Commandes non validées</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Client</th>
+                    <th>Adresse</th>
+                    <th>Contact</th>
+                    <th>Confirmer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Boucle pour afficher chaque commande non validée -->
+                {% for order in orders %}
+                    {% if not order.validate %}
+                        <tr>
+                            <td class="align-middle">{{ order.id }}</td>
+                            <td class="align-middle">{{ order.last_name }} {{ order.first_name }}</td>
+                            <td class="align-middle">
+                                {{ order.address }}
+                                <br>
+                                {{ order.country }}
+                            </td>
+                            <td class="align-middle">
+                                {{ order.email }}
+                                <br>
+                                {{ order.phone }}
+                            </td>
+                            <td class="align-middle">
+                                <form method="POST" action="{% url 'confirm_order' order.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-secondary px-4">Confirmer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container p-5">
+        <h1 class="text-center mb-5">Commandes validées</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Client</th>
+                    <th>Adresse</th>
+                    <th>Contact</th>
+                    <th>Confirmer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Boucle pour afficher chaque commande validée -->
+                {% for order in orders %}
+                    {% if order.validate %}
+                        <tr>
+                            <td class="align-middle">{{ order.id }}</td>
+                            <td class="align-middle">{{ order.last_name }} {{ order.first_name }}</td>
+                            <td class="align-middle">
+                                {{ order.address }}
+                                <br>
+                                {{ order.country }}
+                            </td>
+                            <td class="align-middle">
+                                {{ order.email }}
+                                <br>
+                                {{ order.phone }}
+                            </td>
+                            <td class="align-middle">
+                                <form method="POST" action="{% url 'confirm_order' order.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary px-4">Confirmer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}

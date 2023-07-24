@@ -1,0 +1,52 @@
+{% extends 'MyApp/baseBack.html' %}
+
+{% block content %}
+
+    <div class="container p-5">
+        <h1 class="text-center mb-5">Mailbox</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>De</th>
+                    <th>Message</th>
+                    <th>Lu</th>
+                    <th>Repondre</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Boucle pour afficher chaque utilisateur -->
+                {% for mail in contact_mails %}
+                        <tr id="row-{{ mail.id }}">
+                            <td class="align-middle">{{ mail.id }}</td>
+                            <td class="align-middle">{{ mail.name }}</td>
+                            <td class="align-middle">{{ mail.message }}</td>
+                            <td class="align-middle">
+                                <form action="{% url 'mark_as_read' mail.id %}" method="post">
+                                    {% csrf_token %}
+                                    {% if mail.read == False %}
+                                        <button type="submit" class="btn btn-primary px-4">O</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-danger px-4">X</button>
+                                    {% endif %}
+                                </form>
+                            </td>
+                            <td class="align-middle">
+                                <a href={% url 'reply' mail.id %}>
+                                    <button class="btn btn-secondary px-4">Reply</button>
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <form action="/contact_mail/destroy/{{ mail.id }}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-secondary px-4">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}

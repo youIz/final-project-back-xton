@@ -1,0 +1,58 @@
+{% extends 'MyApp/baseBack.html' %}
+
+{% block content %}
+    <div class="container p-5">
+        <h1 class="text-center mb-5">Liste des utilisateurs</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Rôle</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Boucle pour afficher chaque utilisateur -->
+                {% for user in users %}
+                    {% if request.user.role.id != 1 and user != request.user %}
+                        {% comment %} Ignorer les autres membres {% endcomment %}
+                    {% else %}
+                        <tr>
+                            <td class="align-middle">{{ user.id }}</td>
+                            <td class="align-middle">{{ user.username }}</td>
+                            <td class="align-middle">{{ user.role.role }}</td>
+                            <td class="align-middle">
+                                {% if request.user.role.id == 4 %}
+                                    <a href="/user/editAll/{{ user.id }}" class="btn btn-secondary px-3">Modifier</a>
+                                {% elif request.user.role.id == 1 and user.role.id == 1 %}
+
+                                {% elif request.user.role.id == 1 and user.role.id != 1 %}
+                                    <a href="/user/editRole/{{ user.id }}" class="btn btn-secondary px-3">Modifier le Rôle</a>
+                                {% endif %}
+                                {% if user.role.id == 1 %}
+                                    {% if request.user.role.id == 1 %}
+                                        {% if request.user.username == user.username %}
+                                            <a href="/user/editAll/{{ user.id }}" class="btn btn-secondary px-3">Modifier</a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                {% if user.role.id != 1 %}
+                                    {% if request.user.role.id == 1 %}
+                                        <form action="/user/destroy/{{ user.id }}" method="POST">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

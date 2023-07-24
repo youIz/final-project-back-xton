@@ -1,0 +1,66 @@
+{% extends 'MyApp/baseBack.html' %}
+
+{% block content %}
+
+<div class="container p-5">
+    <h1 class="text-center mb-5">Liste des catégories de produit</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Catégorie</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Boucle pour afficher chaque catégorie de produit -->
+            {% for productCat in productsCategory %}
+            <tr>
+                <td class="align-middle">{{ productCat.id }}</td>
+                <td class="align-middle">{{ productCat.value }}</td>
+                <td class="align-middle">
+                    <form action="/product/destroy/{{ productCat.id }}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'create_product_categorie' %}">
+        <button type="button" class="btn btn-primary">Créer une catégorie de produit</button>
+    </a>
+</div>
+
+<div class="container p-5">
+    <h1 class="text-center mb-5">Liste des catégories de blog</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Catégorie</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Boucle pour afficher chaque catégorie d'article -->
+            {% for articleCat in articleCategory %}
+            <tr>
+                <td class="align-middle">{{ articleCat.id }}</td>
+                <td class="align-middle">{{ articleCat.category }}</td>
+                <td class="align-middle">
+                    <form action="/categorieBlog/destroy/{{ articleCat.id }}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'create_blog_categorie' %}">
+        <button type="button" class="btn btn-primary">Créer une catégorie de blog</button>
+    </a>
+</div>
+{% endblock content %}
